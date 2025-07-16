@@ -286,6 +286,10 @@ export interface IFixedTerminalDimensions {
 	rows?: number;
 }
 
+export interface IProcessCreationResult {
+	injectedArgs: string[];
+}
+
 /**
  * A service that communicates with a pty host.
 */
@@ -327,7 +331,7 @@ export interface IPtyService {
 	 */
 	getLatency(): Promise<IPtyHostLatencyMeasurement[]>;
 
-	start(id: number): Promise<ITerminalLaunchError | { injectedArgs: string[] } | undefined>;
+	start(id: number): Promise<ITerminalLaunchError | IProcessCreationResult | undefined>;
 	shutdown(id: number, immediate: boolean): Promise<void>;
 	input(id: number, data: string): Promise<void>;
 	resize(id: number, cols: number, rows: number): Promise<void>;
@@ -765,7 +769,7 @@ export interface ITerminalChildProcess {
 	 * @returns undefined when the process was successfully started, otherwise an object containing
 	 * information on what went wrong.
 	 */
-	start(): Promise<ITerminalLaunchError | { injectedArgs: string[] } | undefined>;
+	start(): Promise<ITerminalLaunchError | IProcessCreationResult | undefined>;
 
 	/**
 	 * Detach the process from the UI and await reconnect.
